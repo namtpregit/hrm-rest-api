@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 // import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseModule } from './database/database.module';
 // import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DatabaseModule } from './database/database.module';
     //   }),
     // }),
     DatabaseModule,
+    AuthModule,
     // SequelizeModule.forRoot({
     //   dialect: 'mysql',
     //   host: 'localhost',

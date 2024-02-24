@@ -1,13 +1,26 @@
+import { DataTypes } from 'sequelize';
 import { Column, Model, Table } from 'sequelize-typescript';
 
 @Table
-export class User extends Model {
+export class User extends Model<User> {
   @Column
-  first322: string;
+  first_name: string;
 
   @Column
-  lastNams2222: string;
+  last_name: string;
+
+  @Column
+  mail_address: string;
+
+  @Column
+  password: string;
+
+  @Column({
+    type: DataTypes.STRING,
+    allowNull: true,
+  })
+  phone: string;
 
   @Column({ defaultValue: true })
-  isActive2: boolean;
+  isActive: boolean;
 }
