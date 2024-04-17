@@ -1,14 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 // import { User } from './users/entities/user.entity';
 // import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseModule } from './database/database.module';
 // import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
     UsersModule,
     // SequelizeModule.forRootAsync({
     //   useFactory: () => ({
@@ -24,6 +29,7 @@ import { DatabaseModule } from './database/database.module';
     //   }),
     // }),
     DatabaseModule,
+    AuthModule,
     // SequelizeModule.forRoot({
     //   dialect: 'mysql',
     //   host: 'localhost',
@@ -37,7 +43,6 @@ import { DatabaseModule } from './database/database.module';
     //   autoLoadModels: true,
     // }),
   ],
-  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
