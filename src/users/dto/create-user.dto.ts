@@ -1,8 +1,9 @@
-export class CreateUserDto {
-  first_name: string;
-  last_name: string;
-  mail_address: string;
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
+import { UserDto } from './user.dto';
+
+export class CreateUserDto extends OmitType(UserDto, ['id'] as const) {
+  @ApiProperty()
+  @IsNotEmpty()
   password: string;
-  phone: string;
-  isActive: boolean;
 }

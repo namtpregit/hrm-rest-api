@@ -10,8 +10,11 @@ export const databaseProviders = [
         host: 'localhost',
         port: 3306,
         username: 'root',
-        password: '1',
+        password: '',
         database: 'hrm-rest-api',
+        query: {
+          raw: true,
+        },
       });
       sequelize.addModels([User]);
       await sequelize.sync({

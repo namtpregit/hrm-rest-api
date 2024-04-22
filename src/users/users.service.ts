@@ -7,44 +7,37 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
-    private usersResponsitory: typeof User,
+    private userRepository: typeof User,
   ) {}
 
-  async create(user: CreateUserDto): Promise<User> {
-    return await this.usersResponsitory.create<User>(user);
+  findAll(): Promise<User[]> {
+    return this.userRepository.findAll();
   }
 
-  async findAll() {
-    return await this.usersResponsitory.findAll<User>();
-  }
-
-  async findOne(id: number): Promise<User> {
-    return await this.usersResponsitory.findOne<User>({ where: { id } });
-  }
-
-  async findOneByEmail(email: string): Promise<User> {
-    return await this.usersResponsitory.findOne<User>({
-      where: { mail_address: email },
+  create(createUserDto: CreateUserDto): Promise<User> {
+    return this.userRepository.create(createUserDto).then((resultEntity) => {
+      return resultEntity.get({ plain: true });
     });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    const data = await this.findOne(id);
-    if (!data) {
-      return 'Not found!';
-    }
-    data['first_name'] = updateUserDto['first_name'];
-    // return await this.usersResponsitory.update<User>(updateUserDto, {
-    //   where: { id },
-    // });
-    return data.save();
+  findOne(id: number) {
+    return `This action returns a #${id} user`;
   }
 
-  async remove(id: number) {
-    const data = await this.findOne(id);
-    if (!data) {
-      return 'Not found!';
-    }
-    return await data.destroy();
+  findOneByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  findOneByID(id: number) {
+    return this.userRepository.findByPk(id);
+  }
+
+  update(id: number, updateUserDto: UpdateUserDto) {
+    console.log('updateUserDto :>> ', updateUserDto);
+    return `This action updates a #${id} user`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} user`;
   }
 }
