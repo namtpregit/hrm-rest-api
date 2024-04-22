@@ -8,13 +8,14 @@ import {
 } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 import { LoginRes } from './dto/login.res';
+import { Public } from './public.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @Public()
+  @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @ApiOkResponse({
