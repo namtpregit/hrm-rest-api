@@ -39,7 +39,7 @@ export class UsersController {
   @ApiBadRequestResponse()
   @ApiBearerAuth('JWT-auth')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOneByID(+id);
   }
 
   @Post()
@@ -59,8 +59,8 @@ export class UsersController {
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
   @ApiBearerAuth('JWT-auth')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(@Body() updateUserDto: UpdateUserDto, @Param('id') id: string) {
+    return this.usersService.update(updateUserDto, +id);
   }
 
   @Delete(':id')

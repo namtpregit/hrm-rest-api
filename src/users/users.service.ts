@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -10,34 +10,37 @@ export class UsersService {
     private userRepository: typeof User,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.findAll();
   }
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userRepository.create(createUserDto).then((resultEntity) => {
-      return resultEntity.get({ plain: true });
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    return await this.userRepository
+      .create(createUserDto)
+      .then((resultEntity) => {
+        return resultEntity.get({ plain: true });
+      });
+  }
+
+  async findOneByEmail(email: string) {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
+  async findOneByID(id: number) {
+    return await this.userRepository.findByPk(id);
+  }
+
+  async update(updateUserDto: UpdateUserDto, id: number): Promise<User> {
+    const data = await this.userRepository.update(updateUserDto, {
+      where: { id },
     });
+    if (!data) {
+      throw new UnauthorizedException();
+    }
+    return await this.findOneByID(id);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  findOneByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email } });
-  }
-
-  findOneByID(id: number) {
-    return this.userRepository.findByPk(id);
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    console.log('updateUserDto :>> ', updateUserDto);
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<number> {
+    return await this.userRepository.destroy({ where: { id } });
   }
 }
