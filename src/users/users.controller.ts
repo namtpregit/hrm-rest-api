@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -28,11 +29,15 @@ export class UsersController {
   @Get()
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
+  @ApiBearerAuth('JWT-auth')
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse()
+  @ApiBearerAuth('JWT-auth')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
@@ -45,16 +50,23 @@ export class UsersController {
   })
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
+  @ApiBearerAuth('JWT-auth')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
   @Patch(':id')
+  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse()
+  @ApiBearerAuth('JWT-auth')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
+  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse()
+  @ApiBearerAuth('JWT-auth')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
   }
