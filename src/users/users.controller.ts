@@ -20,6 +20,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
+import { UserResource } from './resource/user.resource';
+import { UserCollection } from './resource/user.collection';
 
 @ApiTags('users')
 @Controller('users')
@@ -27,19 +29,31 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: UserResource,
+  })
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
   @ApiBearerAuth('JWT-auth')
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(): Promise<UserCollection> {
+    const users = await this.usersService.findAll();
+    const data = new UserCollection();
+    data.data = users;
+    return data;
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: UserResource,
+  })
   @ApiUnauthorizedResponse()
   @ApiBadRequestResponse()
   @ApiBearerAuth('JWT-auth')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneByID(+id);
+  async findOne(@Param('id') id: string): Promise<UserResource> {
+    const data = await this.usersService.findOneByID(+id);
+    return new UserResource(data);
   }
 
   @Post()
